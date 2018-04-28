@@ -3,9 +3,9 @@ Answers multiple choice questions built in Python using Google Custom Search API
 
 ### How it works:
 Script takes in three possible ways of input:
-1. Command line arguments
-2. OCR
-3. Clipboard
+1. [Command line arguments](#command-line-arguments)
+2. [OCR](#ocr)
+3. [Clipboard](#clipboard)
 
 It reads and formats the input data to perform a google search for the question on Quizlet using Google Custom Search API. bot.py grabs the snippet output from each API result and does a word count for each multiple choice options. The option with the highest word count is chosen as the best answer. With this method, I was able to obtain 100% scores on my quizes. 
 
