@@ -2,6 +2,7 @@ import io
 import os
 import bot
 import re
+import win32clipboard
 
 # Imports the Google Cloud client library
 from google.cloud import vision
@@ -30,6 +31,7 @@ image = types.Image(content=content)
 #text detection
 res = client.document_text_detection(image=image)
 text = res.text_annotations
+#print(res)
 
 '''
 print('Labels:')
@@ -46,26 +48,26 @@ options = {
 
 print("QUESTION:")
 
-question = text[0].description.replace('"', '')
+question = text[0].description.replace('"', '').replace("'", '')
 re.escape(question)
-question = re.split(r'[?:]+', question)
-#question = text[0].description.replace('"', '').split(':')[0]
-#question = text[0].description.replace('"', '').split('?')[0]
+question = question.split("\n")
 
+index = 0
+for q in question:
+    if(q.find("?") != -1):
+        break
+    index += 1
+print(question)
+option = question[index:-1]
+question = question[0:index+1]
 
-question = question[0].replace("\n", '')
+question = " ".join(question)
 print(question)
 
-'''
-print('\n')
-print(text[0].description)
-print('\n')
-'''
-
-option = text[0].description.replace('"', '').replace('D Play\n', '').replace('Play\n', '')
-option = re.split(r'[O+]+', option)
-
-print(option)
+win32clipboard.OpenClipboard()
+win32clipboard.EmptyClipboard()
+win32clipboard.SetClipboardText(question)
+win32clipboard.CloseClipboard()
 
 if len(option) > 1:
     options['A'] = option[1]
@@ -78,16 +80,14 @@ if len(option) > 4:
 
 print("\nOPTIONS:")
 
-options['A'] = options['A'].replace('\n', '').replace('O ', '')
-options['B'] = options['B'].replace('\n', '').replace('O ', '')
-options['C'] = options['C'].replace('\n', '').replace('O ', '')
-options['D'] = options['D'].replace('\n', '').replace('O ', '')
+options['A'] = options['A'].replace('\n', '').replace("BC", "B.C.").replace("AD", "A.D.")
+options['B'] = options['B'].replace('\n', '').replace("BC", "B.C.").replace("AD", "A.D.")
+options['C'] = options['C'].replace('\n', '').replace("BC", "B.C.").replace("AD", "A.D.")
+options['D'] = options['D'].replace('\n', '').replace("BC", "B.C.").replace("AD", "A.D.")
 
 for o in options:
-    options[o] = options[o].replace('Answer', '')
+    options[o] = options[o]
     if options[o]:
-        print("hi")
         print(f"{o}.{options[o]}")
-
 
 bot.getAnswer(question, options['A'], options['B'], options['C'], options['D'])

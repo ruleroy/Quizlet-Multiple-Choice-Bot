@@ -55,19 +55,19 @@ def runText():
         clipdata.remove('Play Play')
         clipdata.remove('Discover Music player')
 
-    question = clipdata[0]
+    question = clipdata[0].replace('"', '')
 
     print("\nQUESTION:")
     print(question)
 
     if len(clipdata) > 1:
-        options['A'] = clipdata[1]
+        options['A'] = clipdata[1].strip()
     if len(clipdata) > 2:
-        options['B'] = clipdata[2]
+        options['B'] = clipdata[2].strip()
     if len(clipdata) > 3:
-        options['C'] = clipdata[3]
+        options['C'] = clipdata[3].strip()
     if len(clipdata) > 4:
-        options['D'] = clipdata[4]
+        options['D'] = clipdata[4].strip()
 
     print("\nOPTIONS:")
     for o in options:
